@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const CounterTable= ({totalConfirmed, totalUnconfirmed, totalGuests}) => {
+const Counter= ({totalConfirmed, totalUnconfirmed, totalGuests}) => {
     return(
         <table className="counter">
             <tbody>
@@ -22,10 +22,10 @@ const CounterTable= ({totalConfirmed, totalUnconfirmed, totalGuests}) => {
     );
 };
 
-CounterTable.propTypes = {
+Counter.propTypes = {
     totalGuests: PropTypes.number.isRequired,
     totalUnconfirmed: PropTypes.number.isRequired,
     totalConfirmed: PropTypes.number.isRequired
 }
 
-export default CounterTable;
+export default Counter;
