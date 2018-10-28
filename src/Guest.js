@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import GuestName from './GuestName';
 
-const Guest= ({guest, handleConfirmation, handleToggleEditing, setName}) => {
+const Guest= ({guest, handleConfirmation, handleToggleEditing, handleRemoveGuest, setName}) => {
     return(
         <li className="responded">
             <GuestName
@@ -18,7 +18,7 @@ const Guest= ({guest, handleConfirmation, handleToggleEditing, setName}) => {
                 Confirmed
             </label>
             <button onClick={handleToggleEditing}>{guest.isEditing ? 'save' : 'edit'}</button>
-            <button>remove</button>
+            <button onClick={handleRemoveGuest}>remove</button>
         </li>
     );
 };
@@ -26,6 +26,7 @@ const Guest= ({guest, handleConfirmation, handleToggleEditing, setName}) => {
 Guest.propTypes = {
     guest: PropTypes.object.isRequired,
     handleConfirmation: PropTypes.func.isRequired,
+    handleRemoveGuest: PropTypes.func.isRequired,
     setName: PropTypes.func.isRequired
 }
 

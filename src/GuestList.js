@@ -3,17 +3,20 @@ import PropTypes from 'prop-types';
 
 import Guest from './Guest'
 
-const GuestList = ({guests, toggleConfirmationAt, toggleEditingAt, setNameAt}) => {
+const GuestList = ({guests, toggleConfirmationAt, toggleEditingAt, removeGuestAt, setNameAt, isFiltered, pendingGuest}) => {
     return(
         <ul>
-        <li className="pending"><span>Safia</span></li>
+        <li className="pending"><span>{pendingGuest}</span></li>
 
-        {guests.map( (guest, index) => (
+        {guests
+            .filter( guest => guest.isConfirmed || isFiltered === false )
+            .map( (guest, index) => (
             <Guest
             key={index}
             guest={guest}
             handleConfirmation={() => toggleConfirmationAt(index)}
             handleToggleEditing={() => toggleEditingAt(index)}
+            handleRemoveGuest={() => removeGuestAt(index)}
             setName={text => setNameAt(text, index)} />
         ))}
 
@@ -23,9 +26,12 @@ const GuestList = ({guests, toggleConfirmationAt, toggleEditingAt, setNameAt}) =
 
 GuestList.propTypes = {
     guests: PropTypes.arrayOf(PropTypes.object).isRequired,
-    toggleConfirmedAt: PropTypes.func.isRequired,
+    toggleConfirmationAt: PropTypes.func.isRequired,
     toggleEditingAt: PropTypes.func.isRequired,
-    setNameAt: PropTypes.func.isRequired
+    removeGuestAt: PropTypes.func.isRequired,
+    setNameAt: PropTypes.func.isRequired,
+    isFiltered: PropTypes.bool.isRequired,
+    pendingGuest: PropTypes.string.isRequired
 }
 
 export default GuestList;

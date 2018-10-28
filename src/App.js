@@ -1,10 +1,14 @@
 import React, { Component } from 'react';
 
 import GuestList from './GuestList';
+import AddGuestForm from './AddGuestForm';
+import CounterTable from './CounterTable';
 
 class App extends Component {
 
     state = {
+        isFiltered: false,
+        pendingGuest: '',
         guests: [
             {
                 name: 'Anabelle',
@@ -18,6 +22,10 @@ class App extends Component {
             }
         ]
     };
+
+    toggleFilter = () => this.setState( prevState => ({
+        isFiltered: !prevState.isFiltered
+    }) );
 
     getTotalGuests = () => this.state.guests.length;
 
@@ -55,45 +63,72 @@ class App extends Component {
             } )
         }));
 
+    updatePendingGuest = pendingGuest => {
+        this.setState(
+            {pendingGuest}
+        );
+    };
+
+    addGuest = (e) => {
+        e.preventDefault();
+        this.setState( prevState => {
+            return {
+                guests: [{
+                    name: prevState.pendingGuest,
+                    isConfirmed: false,
+                    isEditing: false
+                }, ...prevState.guests],
+                pendingGuest: ''
+            }
+        } );
+    };
+
+    removeGuestAt = indexToBeChanged => {
+        console.log('remove guest called for index' + indexToBeChanged);
+        this.setState( prevState => {
+            return {
+                guests: [...prevState.guests.slice(0, indexToBeChanged),
+                ...prevState.guests.slice(indexToBeChanged + 1)]
+            }
+        } );
+    };
+
     render() {
+
+    const totalGuests = this.getTotalGuests();
+    const totalConfirmed = this.getTotalConfirmedGuests();
+    const totalUnconfirmed = this.getTotalUnconfirmedGuests();
+
     return (
         <div className="App">
         <header>
             <h1>RSVP</h1>
             <p>A React.js App</p>
-            <form>
-                <input type="text" value="Safia" placeholder="Invite Someone" />
-                <button type="submit" name="submit" value="submit">Submit</button>
-            </form>
+            <AddGuestForm
+             updatePendingGuest={this.updatePendingGuest}
+             addGuest={this.addGuest}
+             pendingGuest={this.state.pendingGuest}/>
         </header>
         <div className="main">
             <div>
             <h2>Invitees</h2>
             <label>
-                <input type="checkbox" /> Hide those who haven't responded
+                <input type="checkbox" onChange={this.toggleFilter} checked={this.state.isFiltered} /> 
+                Hide those who haven't responded
             </label>
             </div>
-            <table className="counter">
-            <tbody>
-                <tr>
-                <td>Attending:</td>
-                <td>2</td>
-                </tr>
-                <tr>
-                <td>Unconfirmed:</td>
-                <td>1</td>
-                </tr>
-                <tr>
-                <td>Total:</td>
-                <td>3</td>
-                </tr>
-            </tbody>
-            </table>
+            <CounterTable
+            totalGuests={totalGuests}
+            totalConfirmed={totalConfirmed}
+            totalUnconfirmed={totalUnconfirmed} />
             <GuestList
             guests={this.state.guests}
             toggleConfirmationAt={this.toggleConfirmationAt}
             toggleEditingAt={this.toggleEditingAt}
-            setNameAt={this.setNameAt} />
+            removeGuestAt={this.removeGuestAt}
+            setNameAt={this.setNameAt}
+            isFiltered={this.state.isFiltered}
+            pendingGuest={this.state.pendingGuest} />
         </div>
         </div>
     );
