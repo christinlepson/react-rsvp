@@ -8,7 +8,7 @@ import GuestList from './GuestList';
 const MainContent = (props) => {
     return(
         <div className="main">
-        
+
             <ConfirmedFilter 
             toggleFilter={props.toggleFilter}
             isFiltered={props.isFiltered}/>
@@ -20,10 +20,10 @@ const MainContent = (props) => {
 
             <GuestList
             guests={props.guests}
-            toggleConfirmationAt={props.toggleConfirmationAt}
-            toggleEditingAt={props.toggleEditingAt}
-            removeGuestAt={props.removeGuestAt}
-            setNameAt={props.setNameAt}
+            toggleConfirmation={props.toggleConfirmation}
+            toggleEditing={props.toggleEditing}
+            removeGuest={props.removeGuest}
+            setName={props.setName}
             isFiltered={props.isFiltered}
             pendingGuest={props.pendingGuest} />
 
@@ -38,10 +38,10 @@ MainContent.propTypes = {
     totalConfirmed: PropTypes.number.isRequired,
     totalUnconfirmed: PropTypes.number.isRequired,
     guests: PropTypes.arrayOf(PropTypes.object).isRequired,
-    toggleConfirmationAt: PropTypes.func.isRequired,
-    toggleEditingAt: PropTypes.func.isRequired,
-    removeGuestAt: PropTypes.func.isRequired,
-    setNameAt: PropTypes.func.isRequired,
+    toggleConfirmation: PropTypes.func.isRequired,
+    toggleEditing: PropTypes.func.isRequired,
+    removeGuest: PropTypes.func.isRequired,
+    setName: PropTypes.func.isRequired,
     pendingGuest: PropTypes.string.isRequired
 }
 

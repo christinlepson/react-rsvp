@@ -12,15 +12,24 @@ class App extends Component {
             {
                 name: 'Anabelle',
                 isConfirmed: false,
-                isEditing: false
+                isEditing: false,
+                id: 1
             },
             {
                 name: 'Chucky',
                 isConfirmed: true,
-                isEditing: false
+                isEditing: false,
+                id: 2
             }
         ]
     };
+
+    lastGuestID = 2;
+
+    generateGuestID = () => {
+        this.lastGuestID += 1;
+        return this.lastGuestID;
+    }
 
     toggleFilter = () => this.setState( prevState => ({
         isFiltered: !prevState.isFiltered
@@ -32,10 +41,10 @@ class App extends Component {
 
     getTotalUnconfirmedGuests = () => this.getTotalGuests() - this.getTotalConfirmedGuests();
 
-    toggleGuestPropertyAt = (property, indexToChange) =>
+    toggleGuestProperty = (property, guestID) =>
         this.setState( prevState => ({
-            guests: prevState.guests.map( (guest, index) => {
-                if (index === indexToChange) {
+            guests: prevState.guests.map( (guest) => {
+                if (guest.id === guestID) {
                     return {
                         ...guest,
                         [property]: !guest[property]
@@ -45,14 +54,14 @@ class App extends Component {
             } )
         }));
 
-    toggleConfirmationAt = (index) => this.toggleGuestPropertyAt('isConfirmed', index);
+    toggleConfirmation = (guestID) => this.toggleGuestProperty('isConfirmed', guestID);
 
-    toggleEditingAt = (index) => this.toggleGuestPropertyAt('isEditing', index);
+    toggleEditing = (guestID) => this.toggleGuestProperty('isEditing', guestID);
 
-    setNameAt = (name, indexToChange) =>
+    setName = (name, guestID) =>
         this.setState( prevState => ({
-            guests: prevState.guests.map( (guest, index) => {
-                if (index === indexToChange) {
+            guests: prevState.guests.map( (guest) => {
+                if (guest.id === guestID) {
                     return {
                         ...guest,
                         name
@@ -75,19 +84,18 @@ class App extends Component {
                 guests: [{
                     name: prevState.pendingGuest,
                     isConfirmed: false,
-                    isEditing: false
+                    isEditing: false,
+                    id: this.generateGuestID()
                 }, ...prevState.guests],
                 pendingGuest: ''
             }
         } );
     };
 
-    removeGuestAt = indexToBeChanged => {
-        console.log('remove guest called for index' + indexToBeChanged);
+    removeGuest = guestID => {
         this.setState( prevState => {
             return {
-                guests: [...prevState.guests.slice(0, indexToBeChanged),
-                ...prevState.guests.slice(indexToBeChanged + 1)]
+                guests: prevState.guests.filter( guest => guest.id !== guestID )
             }
         } );
     };
@@ -113,10 +121,10 @@ class App extends Component {
             totalConfirmed={totalConfirmed}
             totalUnconfirmed={totalUnconfirmed}
             guests={this.state.guests}
-            toggleConfirmationAt={this.toggleConfirmationAt}
-            toggleEditingAt={this.toggleEditingAt}
-            removeGuestAt={this.removeGuestAt}
-            setNameAt={this.setNameAt}
+            toggleConfirmation={this.toggleConfirmation}
+            toggleEditing={this.toggleEditing}
+            removeGuest={this.removeGuest}
+            setName={this.setName}
             pendingGuest={this.state.pendingGuest}/>
 
         </div>
